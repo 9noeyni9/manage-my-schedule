@@ -7,6 +7,8 @@ import com.sparta.managemyschedule.entity.Schedule;
 import com.sparta.managemyschedule.repository.ScheduleRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.NoSuchElementException;
+
 @Component
 public class ScheduleService {
 
@@ -25,8 +27,8 @@ public class ScheduleService {
         return createResponseDto;
     }
 
-    public ReadResponseDto readSchedule(Long scheduleId) throws NullPointerException {
-        Schedule readSchedule = scheduleRepository.findById(scheduleId).orElseThrow();
+    public ReadResponseDto readSchedule(Long scheduleId) throws NoSuchElementException {
+        Schedule readSchedule = scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
         ReadResponseDto readResponseDto = new ReadResponseDto(readSchedule);
 
         return readResponseDto;
