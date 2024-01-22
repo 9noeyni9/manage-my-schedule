@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name="schedule")
 @NoArgsConstructor
-public class Schedule {
+public class Schedule extends ScheduleDate{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

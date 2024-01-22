@@ -4,6 +4,8 @@ import com.sparta.managemyschedule.entity.Schedule;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDate;
+
 @Getter
 @AllArgsConstructor
 public class CreateResponseDto {
@@ -11,6 +13,7 @@ public class CreateResponseDto {
     private String title;
     private String content;
     private String manager;
+    private LocalDate createdDate;
     
     // 작성일 추가
 
@@ -19,5 +22,6 @@ public class CreateResponseDto {
         this.title = schedule.getTitle();
         this.content = schedule.getContent();
         this.manager = schedule.getManager();
+        this.createdDate = schedule.getCreatedDate();
     }
 }
