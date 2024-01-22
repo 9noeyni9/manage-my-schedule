@@ -2,6 +2,7 @@ package com.sparta.managemyschedule.controller;
 
 import com.sparta.managemyschedule.dto.requestDto.CreateRequestDto;
 import com.sparta.managemyschedule.dto.responseDto.CreateResponseDto;
+import com.sparta.managemyschedule.dto.responseDto.ReadResponseDto;
 import com.sparta.managemyschedule.service.ScheduleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,5 +20,12 @@ public class ScheduleController {
     public CreateResponseDto createSchedule(@RequestBody CreateRequestDto createRequestDto){
         CreateResponseDto createResponseDto = scheduleService.createSchedule(createRequestDto);
         return createResponseDto;
+    }
+
+    @GetMapping("/{scheduleId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ReadResponseDto readSchedule(@PathVariable Long scheduleId){
+        ReadResponseDto readResponseDto = scheduleService.readSchedule(scheduleId);
+        return readResponseDto;
     }
 }
