@@ -4,6 +4,7 @@ import com.sparta.managemyschedule.dto.requestDto.CreateRequestDto;
 import com.sparta.managemyschedule.dto.requestDto.DeleteScheduleRequestDto;
 import com.sparta.managemyschedule.dto.requestDto.UpdateScheduleRequest;
 import com.sparta.managemyschedule.dto.responseDto.CreateResponseDto;
+import com.sparta.managemyschedule.dto.responseDto.ReadAllScheduleResponseDto;
 import com.sparta.managemyschedule.dto.responseDto.ReadResponseDto;
 import com.sparta.managemyschedule.entity.Schedule;
 import com.sparta.managemyschedule.repository.ScheduleRepository;
@@ -11,6 +12,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
@@ -41,13 +43,21 @@ public class ScheduleService {
         return readResponseDto;
     }
 
+    public ReadAllScheduleResponseDto readAll() {
+        List<Schedule> scheduleList = scheduleRepository.findAllByOrderByCreatedDateDesc();
+
+        ReadAllScheduleResponseDto readAllScheduleResponseDto = new ReadAllScheduleResponseDto(scheduleList);
+
+        return readAllScheduleResponseDto;
+    }
+
     @Transactional
     public void updateSchedule(UpdateScheduleRequest updateScheduleRequest, Long scheduleId) {
         schedule = scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
         if (Objects.equals(schedule.getPassword(), updateScheduleRequest.getInsertPwd())) {
             schedule.update(updateScheduleRequest);
         } else {
-            System.out.println(HttpStatus.BAD_REQUEST);
+            throw new NoSuchElementException("Invalid password");
         }
     }
 
@@ -56,9 +66,9 @@ public class ScheduleService {
         schedule = scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
 
         if(Objects.equals(schedule.getPassword(),insertPwd))
-            scheduleRepository.deleteById(scheduleId, insertPwd);
+            scheduleRepository.deleteById(scheduleId);
         else
-            System.out.println(HttpStatus.BAD_REQUEST);
+            throw new NoSuchElementException("Invalid password");
 
     }
 }

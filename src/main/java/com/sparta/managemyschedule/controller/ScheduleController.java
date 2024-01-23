@@ -4,6 +4,7 @@ import com.sparta.managemyschedule.dto.requestDto.CreateRequestDto;
 import com.sparta.managemyschedule.dto.requestDto.DeleteScheduleRequestDto;
 import com.sparta.managemyschedule.dto.requestDto.UpdateScheduleRequest;
 import com.sparta.managemyschedule.dto.responseDto.CreateResponseDto;
+import com.sparta.managemyschedule.dto.responseDto.ReadAllScheduleResponseDto;
 import com.sparta.managemyschedule.dto.responseDto.ReadResponseDto;
 import com.sparta.managemyschedule.service.ScheduleService;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,14 @@ public class ScheduleController {
     public ReadResponseDto readSchedule(@PathVariable Long scheduleId){
         ReadResponseDto readResponseDto = scheduleService.readSchedule(scheduleId);
         return readResponseDto;
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public ReadAllScheduleResponseDto readAll(){
+        ReadAllScheduleResponseDto readAllScheduleResponseDto = scheduleService.readAll();
+
+        return readAllScheduleResponseDto;
     }
 
     @PutMapping("/{scheduleId}")
