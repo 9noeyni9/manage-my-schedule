@@ -1,9 +1,11 @@
 package com.sparta.managemyschedule.entity;
 
 import com.sparta.managemyschedule.dto.requestDto.CreateRequestDto;
+import com.sparta.managemyschedule.dto.requestDto.UpdateScheduleRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.naming.StringManager;
 
 @Entity
 @Getter
@@ -29,9 +31,14 @@ public class Schedule extends ScheduleDate{
         this.manager = createRequestDto.getManager();
     }
 
-    public void updateSchedule(String title, String content, String manager){
+    public void settingSchedule(String title, String content, String manager){ // 테스트용 값 setting
         this.title = title;
         this.content = content;
         this.manager = manager;
+    }
+    public void update(UpdateScheduleRequest updateScheduleRequest){
+        this.title = updateScheduleRequest.getTitle();
+        this.content = updateScheduleRequest.getContent();
+        this.manager = updateScheduleRequest.getManager();
     }
 }

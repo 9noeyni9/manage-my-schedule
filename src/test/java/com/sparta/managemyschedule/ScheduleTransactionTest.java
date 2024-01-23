@@ -1,6 +1,5 @@
 package com.sparta.managemyschedule;
 
-import com.sparta.managemyschedule.dto.requestDto.CreateRequestDto;
 import com.sparta.managemyschedule.entity.Schedule;
 import com.sparta.managemyschedule.repository.ScheduleRepository;
 import jakarta.persistence.EntityManager;
@@ -23,13 +22,14 @@ class ScheduleTransactionTest {
 
     @Test
     @Transactional
-    @Rollback(value = false)
+    @Rollback
     @DisplayName("스케줄 등록 성공")
     void createScheduleTest() {
         Schedule schedule = new Schedule();
 
-        schedule.updateSchedule("테스트 스케줄 title", "테스트 스케줄 content", "담당자테스트");
+        schedule.settingSchedule("테스트 스케줄 title", "테스트 스케줄 content", "담당자테스트");
 
         em.persist(schedule);
     }
+
 }
