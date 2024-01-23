@@ -5,13 +5,12 @@ import com.sparta.managemyschedule.dto.requestDto.UpdateScheduleRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.apache.naming.StringManager;
 
 @Entity
 @Getter
-@Table(name="schedule")
+@Table(name = "schedule")
 @NoArgsConstructor
-public class Schedule extends ScheduleDate{
+public class Schedule extends ScheduleDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,24 +18,29 @@ public class Schedule extends ScheduleDate{
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "content", nullable = false,length = 5000)
+    @Column(name = "content", nullable = false, length = 5000)
     private String content;
 
     @Column(name = "manager")
     private String manager;
 
-    public Schedule(CreateRequestDto createRequestDto){
+    @Column(name="password")
+    private String password;
+
+    public Schedule(CreateRequestDto createRequestDto) {
         this.title = createRequestDto.getTitle();
         this.content = createRequestDto.getContent();
         this.manager = createRequestDto.getManager();
+        this.password = createRequestDto.getPassword();
     }
 
-    public void settingSchedule(String title, String content, String manager){ // 테스트용 값 setting
+    public void settingSchedule(String title, String content, String manager) { // 테스트용 값 setting
         this.title = title;
         this.content = content;
         this.manager = manager;
     }
-    public void update(UpdateScheduleRequest updateScheduleRequest){
+
+    public void update(UpdateScheduleRequest updateScheduleRequest) {
         this.title = updateScheduleRequest.getTitle();
         this.content = updateScheduleRequest.getContent();
         this.manager = updateScheduleRequest.getManager();

@@ -1,14 +1,13 @@
 package com.sparta.managemyschedule.controller;
 
 import com.sparta.managemyschedule.dto.requestDto.CreateRequestDto;
+import com.sparta.managemyschedule.dto.requestDto.DeleteScheduleRequestDto;
 import com.sparta.managemyschedule.dto.requestDto.UpdateScheduleRequest;
 import com.sparta.managemyschedule.dto.responseDto.CreateResponseDto;
-import com.sparta.managemyschedule.dto.responseDto.ReadAllScheduleResponseDto;
 import com.sparta.managemyschedule.dto.responseDto.ReadResponseDto;
 import com.sparta.managemyschedule.service.ScheduleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.annotation.RequestScope;
 
 @RestController
 @RequestMapping("/schedule")
@@ -40,7 +39,7 @@ public class ScheduleController {
 
     @DeleteMapping("/{scheduleId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteSchedule(@PathVariable Long scheduleId){
-        scheduleService.deleteSchedule(scheduleId);
+    public void deleteSchedule(@PathVariable Long scheduleId, @RequestBody String insertPwd){
+        scheduleService.deleteSchedule(scheduleId, insertPwd);
     }
 }

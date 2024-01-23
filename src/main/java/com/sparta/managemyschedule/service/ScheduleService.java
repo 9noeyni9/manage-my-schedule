@@ -1,29 +1,32 @@
 package com.sparta.managemyschedule.service;
 
 import com.sparta.managemyschedule.dto.requestDto.CreateRequestDto;
+import com.sparta.managemyschedule.dto.requestDto.DeleteScheduleRequestDto;
 import com.sparta.managemyschedule.dto.requestDto.UpdateScheduleRequest;
 import com.sparta.managemyschedule.dto.responseDto.CreateResponseDto;
 import com.sparta.managemyschedule.dto.responseDto.ReadResponseDto;
 import com.sparta.managemyschedule.entity.Schedule;
 import com.sparta.managemyschedule.repository.ScheduleRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Component;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
-@Component
 @Service
 public class ScheduleService {
 
-    private final ScheduleRepository scheduleRepository;
+    private ScheduleRepository scheduleRepository;
 
-    public ScheduleService(ScheduleRepository scheduleRepository){
+    Schedule schedule;
+
+    public ScheduleService(ScheduleRepository scheduleRepository) {
         this.scheduleRepository = scheduleRepository;
     }
 
-    public CreateResponseDto createSchedule(CreateRequestDto createRequestDto){
-        Schedule schedule = new Schedule(createRequestDto);
+    public CreateResponseDto createSchedule(CreateRequestDto createRequestDto) {
+        schedule = new Schedule(createRequestDto);
 
         Schedule saveSchedule = scheduleRepository.save(schedule);
 
@@ -32,24 +35,30 @@ public class ScheduleService {
     }
 
     public ReadResponseDto readSchedule(Long scheduleId) throws NoSuchElementException {
-        Schedule readSchedule = scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
-        ReadResponseDto readResponseDto = new ReadResponseDto(readSchedule);
+        schedule = scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
+        ReadResponseDto readResponseDto = new ReadResponseDto(schedule);
 
         return readResponseDto;
     }
 
     @Transactional
     public void updateSchedule(UpdateScheduleRequest updateScheduleRequest, Long scheduleId) {
-        Schedule updateId = scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
-
-        updateId.update(updateScheduleRequest);
+        schedule = scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
+        if (Objects.equals(schedule.getPassword(), updateScheduleRequest.getInsertPwd())) {
+            schedule.update(updateScheduleRequest);
+        } else {
+            System.out.println(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Transactional
-    public void deleteSchedule(Long scheduleId) {
-        // 비밀번호 비교 후 삭제 구현 예정
-        scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
+    public void deleteSchedule(Long scheduleId, String insertPwd) {
+        schedule = scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
 
-        scheduleRepository.deleteById(scheduleId);
+        if(Objects.equals(schedule.getPassword(),insertPwd))
+            scheduleRepository.deleteById(scheduleId, insertPwd);
+        else
+            System.out.println(HttpStatus.BAD_REQUEST);
+
     }
 }
