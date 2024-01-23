@@ -65,9 +65,6 @@ public class ScheduleService {
     public void deleteSchedule(Long scheduleId, DeleteScheduleRequestDto deleteScheduleRequestDto) {
         schedule = scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
 
-        System.out.println("service에 schedule.getPassword() : " + schedule.getPassword());
-        System.out.println("service에 insertPwd : " + deleteScheduleRequestDto.getInsertPwd());
-        System.out.println("둘이 같나? : "+ Objects.equals(schedule.getPassword(),deleteScheduleRequestDto.getInsertPwd()));
         if(Objects.equals(schedule.getPassword(),deleteScheduleRequestDto.getInsertPwd()))
             scheduleRepository.deleteById(scheduleId);
         else

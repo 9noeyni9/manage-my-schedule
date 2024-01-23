@@ -49,7 +49,6 @@ public class ScheduleController {
     @DeleteMapping("/{scheduleId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteSchedule(@PathVariable Long scheduleId, @RequestBody DeleteScheduleRequestDto deleteScheduleRequestDto){
-        System.out.println("controller 에 scheduleId :" + scheduleId + "controller에 insertPwd : "+ deleteScheduleRequestDto.getInsertPwd());
         scheduleService.deleteSchedule(scheduleId, deleteScheduleRequestDto);
     }
 }
