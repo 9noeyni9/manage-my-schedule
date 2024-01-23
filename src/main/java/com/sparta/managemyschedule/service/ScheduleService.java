@@ -40,11 +40,16 @@ public class ScheduleService {
 
     @Transactional
     public void updateSchedule(UpdateScheduleRequest updateScheduleRequest, Long scheduleId) {
-        System.out.println("scheduleId 서비스 단 확인 : " + scheduleId);
         Schedule updateId = scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
 
-        System.out.println("업데이트 전 title"+updateId.getTitle());
         updateId.update(updateScheduleRequest);
-        System.out.println("업데이트 후 title"+updateId.getTitle());
+    }
+
+    @Transactional
+    public void deleteSchedule(Long scheduleId) {
+        // 비밀번호 비교 후 삭제 구현 예정
+        scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
+
+        scheduleRepository.deleteById(scheduleId);
     }
 }

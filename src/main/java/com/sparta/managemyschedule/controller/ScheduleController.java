@@ -35,7 +35,12 @@ public class ScheduleController {
     @PutMapping("/{scheduleId}")
     @ResponseStatus(HttpStatus.OK)
     public void updateSchedule(@RequestBody UpdateScheduleRequest updateScheduleRequest, @PathVariable Long scheduleId){
-        System.out.println("scheduleId 컨트롤러 확인 : " + scheduleId);
         scheduleService.updateSchedule(updateScheduleRequest,scheduleId);
+    }
+
+    @DeleteMapping("/{scheduleId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteSchedule(@PathVariable Long scheduleId){
+        scheduleService.deleteSchedule(scheduleId);
     }
 }
