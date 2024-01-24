@@ -6,9 +6,12 @@ import com.sparta.managemyschedule.dto.requestDto.UpdateScheduleRequest;
 import com.sparta.managemyschedule.dto.responseDto.CreateResponseDto;
 import com.sparta.managemyschedule.dto.responseDto.ReadAllScheduleResponseDto;
 import com.sparta.managemyschedule.dto.responseDto.ReadResponseDto;
+import com.sparta.managemyschedule.entity.Schedule;
 import com.sparta.managemyschedule.service.ScheduleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/schedule")
@@ -34,10 +37,9 @@ public class ScheduleController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ReadAllScheduleResponseDto readAll(){
-        ReadAllScheduleResponseDto readAllScheduleResponseDto = scheduleService.readAll();
-
-        return readAllScheduleResponseDto;
+    public List<Schedule> readAll(){
+        List<Schedule> scheduleList = scheduleService.readAll();
+        return scheduleList;
     }
 
     @PutMapping("/{scheduleId}")

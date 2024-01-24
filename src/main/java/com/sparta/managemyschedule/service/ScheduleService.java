@@ -43,12 +43,10 @@ public class ScheduleService {
         return readResponseDto;
     }
 
-    public ReadAllScheduleResponseDto readAll() {
-        List<ReadResponseDto> scheduleList = scheduleRepository.findAllByOrderByCreatedDateDesc();
+    public List<Schedule> readAll() { // 반환 타입 DTOX
+        List<Schedule> scheduleList = scheduleRepository.findAllByOrderByCreatedDateDesc();
 
-        ReadAllScheduleResponseDto readAllScheduleResponseDto = new ReadAllScheduleResponseDto(scheduleList);
-
-        return readAllScheduleResponseDto;
+        return scheduleList;
     }
 
     @Transactional
