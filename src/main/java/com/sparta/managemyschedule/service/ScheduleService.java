@@ -4,17 +4,16 @@ import com.sparta.managemyschedule.dto.requestDto.CreateRequestDto;
 import com.sparta.managemyschedule.dto.requestDto.DeleteScheduleRequestDto;
 import com.sparta.managemyschedule.dto.requestDto.UpdateScheduleRequest;
 import com.sparta.managemyschedule.dto.responseDto.CreateResponseDto;
-import com.sparta.managemyschedule.dto.responseDto.ReadAllScheduleResponseDto;
 import com.sparta.managemyschedule.dto.responseDto.ReadResponseDto;
 import com.sparta.managemyschedule.entity.Schedule;
 import com.sparta.managemyschedule.repository.ScheduleRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class ScheduleService {
@@ -29,9 +28,7 @@ public class ScheduleService {
 
     public CreateResponseDto createSchedule(CreateRequestDto createRequestDto) {
         schedule = new Schedule(createRequestDto);
-
         Schedule saveSchedule = scheduleRepository.save(schedule);
-
         CreateResponseDto createResponseDto = new CreateResponseDto(saveSchedule);
         return createResponseDto;
     }
@@ -39,14 +36,16 @@ public class ScheduleService {
     public ReadResponseDto readSchedule(Long scheduleId) throws NoSuchElementException {
         schedule = scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
         ReadResponseDto readResponseDto = new ReadResponseDto(schedule);
-
         return readResponseDto;
     }
 
-    public List<Schedule> readAll() { // 반환 타입 DTOX
-        List<Schedule> scheduleList = scheduleRepository.findAllByOrderByCreatedDateDesc();
+    public List<ReadResponseDto> readAll() {
 
-        return scheduleList;
+        List<Schedule> scheduleList = scheduleRepository.findAllByOrderByCreatedDateDesc();
+        List<ReadResponseDto> scheduleListToDto = scheduleList.stream()
+                .map(m -> new ReadResponseDto(m)).collect(Collectors.toList());
+
+        return scheduleListToDto;
     }
 
     @Transactional

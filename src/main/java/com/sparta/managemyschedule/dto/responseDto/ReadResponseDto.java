@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-//
+
 @Getter
 @NoArgsConstructor
 public class ReadResponseDto {
@@ -16,7 +16,7 @@ public class ReadResponseDto {
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
-    public ReadResponseDto(Schedule schedule){
+    public ReadResponseDto(Schedule schedule) {
         this.scheduleId = schedule.getId();
         this.title = schedule.getTitle();
         this.content = schedule.getContent();
