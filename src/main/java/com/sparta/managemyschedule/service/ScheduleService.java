@@ -57,7 +57,7 @@ public class ScheduleService {
         if (Objects.equals(schedule.getPassword(), updateScheduleRequest.getInsertPwd())) {
             schedule.update(updateScheduleRequest);
         } else {
-            throw new NoSuchElementException("Invalid password");
+            throw new NoSuchElementException("비밀번호가 일치하지 않습니다.");
         }
     }
 
@@ -68,6 +68,6 @@ public class ScheduleService {
         if(Objects.equals(schedule.getPassword(),deleteScheduleRequestDto.getInsertPwd()))
             scheduleRepository.deleteById(scheduleId);
         else
-            throw new NoSuchElementException("Invalid password");
+            throw new NoSuchElementException("비밀번호가 일치하지 않습니다.");
     }
 }
