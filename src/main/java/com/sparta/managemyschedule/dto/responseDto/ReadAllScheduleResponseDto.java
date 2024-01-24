@@ -9,5 +9,5 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class ReadAllScheduleResponseDto {
-    List<Schedule> scheduleList;
+    List<ReadResponseDto> scheduleList;
 }

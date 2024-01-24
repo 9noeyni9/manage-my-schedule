@@ -2,17 +2,19 @@ package com.sparta.managemyschedule.dto.responseDto;
 
 import com.sparta.managemyschedule.entity.Schedule;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
+@NoArgsConstructor
 public class ReadResponseDto {
     private Long scheduleId;
     private String title;
     private String content;
     private String manager;
-    private Timestamp createdDate;
-    private Timestamp modifiedDate;
+    private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
 
     public ReadResponseDto(Schedule schedule){
         this.scheduleId = schedule.getId();

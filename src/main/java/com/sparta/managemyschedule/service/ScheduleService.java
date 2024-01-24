@@ -44,7 +44,7 @@ public class ScheduleService {
     }
 
     public ReadAllScheduleResponseDto readAll() {
-        List<Schedule> scheduleList = scheduleRepository.findAllByOrderByCreatedDateDesc();
+        List<ReadResponseDto> scheduleList = scheduleRepository.findAllByOrderByCreatedDateDesc();
 
         ReadAllScheduleResponseDto readAllScheduleResponseDto = new ReadAllScheduleResponseDto(scheduleList);
 

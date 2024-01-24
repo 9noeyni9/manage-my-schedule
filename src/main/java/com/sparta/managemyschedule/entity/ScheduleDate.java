@@ -7,7 +7,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Getter
 @MappedSuperclass
@@ -15,11 +16,19 @@ import java.time.LocalDate;
 public abstract class ScheduleDate {
     @CreatedDate
     @Column(name = "createdDate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp createdDate;
+    private LocalDateTime createdDate;
 
     @LastModifiedDate
     @Column(name = "modifiedDate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp modifiedDate;
+    private LocalDateTime modifiedDate;
+
+    @PrePersist
+    protected void onCreate() {
+        createdDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        modifiedDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+    }
 }

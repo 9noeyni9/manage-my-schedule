@@ -1,5 +1,6 @@
 package com.sparta.managemyschedule.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.managemyschedule.dto.requestDto.CreateRequestDto;
 import com.sparta.managemyschedule.dto.requestDto.UpdateScheduleRequest;
 import jakarta.persistence.*;
@@ -27,7 +28,8 @@ public class Schedule extends ScheduleDate {
     @Column(name = "manager")
     private String manager;
 
-    @Column(name="password")
+    @JsonIgnore
+    @Column(name="password",nullable = false)
     private String password;
 
     public Schedule(CreateRequestDto createRequestDto) {

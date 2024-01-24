@@ -5,6 +5,7 @@ import lombok.Getter;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 public class CreateResponseDto {
@@ -12,7 +13,7 @@ public class CreateResponseDto {
     private String title;
     private String content;
     private String manager;
-    private Timestamp createdDate;
+    private LocalDateTime createdDate;
     
     public CreateResponseDto(Schedule schedule){
         this.scheduleId = schedule.getId();
