@@ -28,7 +28,6 @@ public class Schedule extends ScheduleDate {
     @Column(name = "manager")
     private String manager;
 
-//    @JsonIgnore
     @Column(name="password",nullable = false)
     private String password;
 

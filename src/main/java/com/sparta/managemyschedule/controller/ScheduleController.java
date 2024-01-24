@@ -41,13 +41,6 @@ public class ScheduleController {
         return scheduleList;
     }
 
-//    @GetMapping
-//    @ResponseStatus(HttpStatus.OK)
-//    public List<Schedule> readAll(){
-//        List<Schedule> scheduleList = scheduleService.readAll();
-//        return scheduleList;
-//    }
-
     @PutMapping("/{scheduleId}")
     @ResponseStatus(HttpStatus.OK)
     public void updateSchedule(@RequestBody UpdateScheduleRequest updateScheduleRequest, @PathVariable Long scheduleId){

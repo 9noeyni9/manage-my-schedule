@@ -48,11 +48,6 @@ public class ScheduleService {
         return scheduleListToDto;
     }
 
-//    public List<Schedule> readAll(){
-//        List<Schedule> scheduleList = scheduleRepository.findAllByOrderByCreatedDateDesc();
-//        return scheduleList;
-//    }
-
     @Transactional
     public void updateSchedule(UpdateScheduleRequest updateScheduleRequest, Long scheduleId) {
         schedule = scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
