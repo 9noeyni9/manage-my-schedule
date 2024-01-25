@@ -5,9 +5,8 @@ import com.sparta.managemyschedule.dto.requestDto.DeleteScheduleRequestDto;
 import com.sparta.managemyschedule.dto.requestDto.UpdateScheduleRequest;
 import com.sparta.managemyschedule.dto.responseDto.CreateResponseDto;
 import com.sparta.managemyschedule.dto.responseDto.ReadResponseDto;
-import com.sparta.managemyschedule.entity.Schedule;
 import com.sparta.managemyschedule.service.ScheduleService;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,35 +20,32 @@ public class ScheduleController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public CreateResponseDto createSchedule(@RequestBody CreateRequestDto createRequestDto){
+    public ResponseEntity<CreateResponseDto> createSchedule(@RequestBody CreateRequestDto createRequestDto){
         CreateResponseDto createResponseDto = scheduleService.createSchedule(createRequestDto);
-        return createResponseDto;
+        return ResponseEntity.ok().body(createResponseDto);
     }
 
     @GetMapping("/{scheduleId}")
-    @ResponseStatus(HttpStatus.OK)
-    public ReadResponseDto readSchedule(@PathVariable Long scheduleId){
+    public ResponseEntity<ReadResponseDto> readSchedule(@PathVariable Long scheduleId){
         ReadResponseDto readResponseDto = scheduleService.readSchedule(scheduleId);
-        return readResponseDto;
+        return ResponseEntity.ok().body(readResponseDto);
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<ReadResponseDto> readAll(){
+    public ResponseEntity<List<ReadResponseDto>> readAll(){
         List<ReadResponseDto> scheduleList = scheduleService.readAll();
-        return scheduleList;
+        return ResponseEntity.ok().body(scheduleList);
     }
 
     @PutMapping("/{scheduleId}")
-    @ResponseStatus(HttpStatus.OK)
-    public void updateSchedule(@RequestBody UpdateScheduleRequest updateScheduleRequest, @PathVariable Long scheduleId){
+    public ResponseEntity<Void> updateSchedule(@RequestBody UpdateScheduleRequest updateScheduleRequest, @PathVariable Long scheduleId){
         scheduleService.updateSchedule(updateScheduleRequest,scheduleId);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{scheduleId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteSchedule(@PathVariable Long scheduleId, @RequestBody DeleteScheduleRequestDto deleteScheduleRequestDto){
+    public ResponseEntity<Void> deleteSchedule(@PathVariable Long scheduleId, @RequestBody DeleteScheduleRequestDto deleteScheduleRequestDto){
         scheduleService.deleteSchedule(scheduleId, deleteScheduleRequestDto);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,13 +1,10 @@
 package com.sparta.managemyschedule.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.managemyschedule.dto.requestDto.CreateRequestDto;
 import com.sparta.managemyschedule.dto.requestDto.UpdateScheduleRequest;
 import jakarta.persistence.*;
-import jdk.jfr.Name;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Entity
 @Getter
