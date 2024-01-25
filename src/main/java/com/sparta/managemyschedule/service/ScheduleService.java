@@ -20,21 +20,19 @@ public class ScheduleService {
 
     private ScheduleRepository scheduleRepository;
 
-    Schedule schedule;
-
     public ScheduleService(ScheduleRepository scheduleRepository) {
         this.scheduleRepository = scheduleRepository;
     }
 
     public CreateResponseDto createSchedule(CreateRequestDto createRequestDto) {
-        schedule = new Schedule(createRequestDto);
+        Schedule schedule = new Schedule(createRequestDto);
         Schedule saveSchedule = scheduleRepository.save(schedule);
         CreateResponseDto createResponseDto = new CreateResponseDto(saveSchedule);
         return createResponseDto;
     }
 
     public ReadResponseDto readSchedule(Long scheduleId) throws NoSuchElementException {
-        schedule = scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
         ReadResponseDto readResponseDto = new ReadResponseDto(schedule);
         return readResponseDto;
     }
@@ -50,7 +48,7 @@ public class ScheduleService {
 
     @Transactional
     public void updateSchedule(UpdateScheduleRequest updateScheduleRequest, Long scheduleId) {
-        schedule = scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
         if (Objects.equals(schedule.getPassword(), updateScheduleRequest.getInsertPwd())) {
             schedule.update(updateScheduleRequest);
         } else {
@@ -60,7 +58,7 @@ public class ScheduleService {
 
     @Transactional
     public void deleteSchedule(Long scheduleId, DeleteScheduleRequestDto deleteScheduleRequestDto) {
-        schedule = scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
 
         if(Objects.equals(schedule.getPassword(),deleteScheduleRequestDto.getInsertPwd()))
             scheduleRepository.deleteById(scheduleId);
