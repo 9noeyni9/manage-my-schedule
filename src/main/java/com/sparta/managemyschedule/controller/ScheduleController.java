@@ -6,18 +6,17 @@ import com.sparta.managemyschedule.dto.requestDto.UpdateScheduleRequest;
 import com.sparta.managemyschedule.dto.responseDto.CreateResponseDto;
 import com.sparta.managemyschedule.dto.responseDto.ReadResponseDto;
 import com.sparta.managemyschedule.service.ScheduleService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/schedule")
 public class ScheduleController {
     private final ScheduleService scheduleService;
-    public ScheduleController(ScheduleService scheduleService){
-        this.scheduleService = scheduleService;
-    }
 
     @PostMapping
     public ResponseEntity<CreateResponseDto> createSchedule(@RequestBody CreateRequestDto createRequestDto){
