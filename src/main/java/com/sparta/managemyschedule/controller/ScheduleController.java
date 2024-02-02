@@ -7,10 +7,9 @@ import com.sparta.managemyschedule.dto.responseDto.CreateResponseDto;
 import com.sparta.managemyschedule.dto.responseDto.ReadResponseDto;
 import com.sparta.managemyschedule.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,8 +30,13 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReadResponseDto>> readAll(){
-        List<ReadResponseDto> scheduleList = scheduleService.readAll();
+    public ResponseEntity<Page<ReadResponseDto>> readAll(
+            @RequestParam("page") int page,
+            @RequestParam("size") int size,
+            @RequestParam("sortBy") String sortBy,
+            @RequestParam("isAsc") boolean isAsc
+    ){
+        Page<ReadResponseDto> scheduleList = scheduleService.readAll(page-1,size,sortBy,isAsc);
         return ResponseEntity.ok().body(scheduleList);
     }
 

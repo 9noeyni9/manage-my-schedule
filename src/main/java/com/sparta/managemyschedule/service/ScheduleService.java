@@ -9,12 +9,14 @@ import com.sparta.managemyschedule.entity.Schedule;
 import com.sparta.managemyschedule.repository.ScheduleRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,13 +37,14 @@ public class ScheduleService {
         return readResponseDto;
     }
 
-    public List<ReadResponseDto> readAll() {
+    public Page<ReadResponseDto> readAll(int page, int size, String sortBy, boolean isAsc) {
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
 
-        List<Schedule> scheduleList = scheduleRepository.findAllByOrderByCreatedDateDesc();
-        List<ReadResponseDto> scheduleListToDto = scheduleList.stream()
-                .map(m -> new ReadResponseDto(m)).collect(Collectors.toList());
+        Page<Schedule> scheduleList = scheduleRepository.findAllByOrderByCreatedDateDesc(pageable);
 
-        return scheduleListToDto;
+        return scheduleList.map(ReadResponseDto::new);
     }
 
     @Transactional
