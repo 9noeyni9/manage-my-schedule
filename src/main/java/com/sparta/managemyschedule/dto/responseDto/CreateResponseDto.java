@@ -10,14 +10,12 @@ public class CreateResponseDto {
     private Long scheduleId;
     private String title;
     private String content;
-    private String manager;
     private LocalDateTime createdDate;
     
     public CreateResponseDto(Schedule schedule){
         this.scheduleId = schedule.getId();
         this.title = schedule.getTitle();
         this.content = schedule.getContent();
-        this.manager = schedule.getManager();
         this.createdDate = schedule.getCreatedDate();
     }
 }

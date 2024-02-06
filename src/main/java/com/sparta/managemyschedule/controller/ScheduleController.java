@@ -9,6 +9,7 @@ import com.sparta.managemyschedule.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,8 @@ import org.springframework.web.bind.annotation.*;
 public class ScheduleController {
     private final ScheduleService scheduleService;
 
-    @PostMapping
+    @PostMapping("/schedules")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<CreateResponseDto> createSchedule(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody CreateRequestDto createRequestDto){
         CreateResponseDto createResponseDto = scheduleService.createSchedule(userDetails.getUser(), createRequestDto);
         return ResponseEntity.ok().body(createResponseDto);
@@ -30,7 +32,8 @@ public class ScheduleController {
         return ResponseEntity.ok().body(readResponseDto);
     }
 
-    @GetMapping
+    @GetMapping("/schedules")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Page<ReadResponseDto>> readAll(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestParam("page") int page,
@@ -43,12 +46,14 @@ public class ScheduleController {
     }
 
     @PutMapping("/schedules/{scheduleId}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Void> updateSchedule(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody UpdateScheduleRequest updateScheduleRequest, @PathVariable Long scheduleId){
         scheduleService.updateSchedule(userDetails.getUser(),updateScheduleRequest,scheduleId);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/schedules/{scheduleId}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Void> deleteSchedule(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long scheduleId){
         scheduleService.deleteSchedule(userDetails.getUser(),scheduleId);
         return ResponseEntity.noContent().build();

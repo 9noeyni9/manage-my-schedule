@@ -6,13 +6,9 @@ import lombok.Getter;
 public class UpdateScheduleRequest {
     private String title;
     private String content;
-    private String manager;
-    private String insertPwd;
 
-    public UpdateScheduleRequest(String title, String content, String manager, String insertPwd){
+    public UpdateScheduleRequest(String title, String content){
         this.title = title;
         this.content =  content;
-        this.manager = manager;
-        this.insertPwd = insertPwd;
     }
 }

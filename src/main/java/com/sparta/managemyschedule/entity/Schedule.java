@@ -22,12 +22,6 @@ public class Schedule extends ScheduleDate {
     @Column(name = "content", nullable = false, length = 5000)
     private String content;
 
-    @Column(name = "manager")
-    private String manager;
-
-    @Column(name="password",nullable = false)
-    private String password;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -36,19 +30,16 @@ public class Schedule extends ScheduleDate {
         this.user = user;
         this.title = createRequestDto.getTitle();
         this.content = createRequestDto.getContent();
-        this.manager = createRequestDto.getManager();
     }
 
-    public void settingSchedule(String title, String content, String manager) { // 테스트용 값 setting
+    public void settingSchedule(String title, String content) { // 테스트용 값 setting
         this.title = title;
         this.content = content;
-        this.manager = manager;
     }
 
     public void update(User user, UpdateScheduleRequest updateScheduleRequest) {
         this.user = user;
         this.title = updateScheduleRequest.getTitle();
         this.content = updateScheduleRequest.getContent();
-        this.manager = updateScheduleRequest.getManager();
     }
 }
