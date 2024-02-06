@@ -32,11 +32,11 @@ public class Schedule extends ScheduleDate {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Schedule(CreateRequestDto createRequestDto, User user) {
+    public Schedule(User user,CreateRequestDto createRequestDto) {
+        this.user = user;
         this.title = createRequestDto.getTitle();
         this.content = createRequestDto.getContent();
         this.manager = createRequestDto.getManager();
-        this.user = user;
     }
 
     public void settingSchedule(String title, String content, String manager) { // 테스트용 값 setting
@@ -45,7 +45,8 @@ public class Schedule extends ScheduleDate {
         this.manager = manager;
     }
 
-    public void update(UpdateScheduleRequest updateScheduleRequest) {
+    public void update(User user, UpdateScheduleRequest updateScheduleRequest) {
+        this.user = user;
         this.title = updateScheduleRequest.getTitle();
         this.content = updateScheduleRequest.getContent();
         this.manager = updateScheduleRequest.getManager();

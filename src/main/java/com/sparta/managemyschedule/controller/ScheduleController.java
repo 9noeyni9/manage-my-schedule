@@ -2,7 +2,6 @@ package com.sparta.managemyschedule.controller;
 
 import com.sparta.managemyschedule.auth.security.UserDetailsImpl;
 import com.sparta.managemyschedule.dto.requestDto.CreateRequestDto;
-import com.sparta.managemyschedule.dto.requestDto.DeleteScheduleRequestDto;
 import com.sparta.managemyschedule.dto.requestDto.UpdateScheduleRequest;
 import com.sparta.managemyschedule.dto.responseDto.CreateResponseDto;
 import com.sparta.managemyschedule.dto.responseDto.ReadResponseDto;
@@ -20,8 +19,8 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @PostMapping
-    public ResponseEntity<CreateResponseDto> createSchedule(@RequestBody CreateRequestDto createRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        CreateResponseDto createResponseDto = scheduleService.createSchedule(createRequestDto, userDetails.getUser());
+    public ResponseEntity<CreateResponseDto> createSchedule(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody CreateRequestDto createRequestDto){
+        CreateResponseDto createResponseDto = scheduleService.createSchedule(userDetails.getUser(), createRequestDto);
         return ResponseEntity.ok().body(createResponseDto);
     }
 
@@ -44,14 +43,14 @@ public class ScheduleController {
     }
 
     @PutMapping("/{scheduleId}")
-    public ResponseEntity<Void> updateSchedule(@RequestBody UpdateScheduleRequest updateScheduleRequest, @PathVariable Long scheduleId){
-        scheduleService.updateSchedule(updateScheduleRequest,scheduleId);
+    public ResponseEntity<Void> updateSchedule(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody UpdateScheduleRequest updateScheduleRequest, @PathVariable Long scheduleId){
+        scheduleService.updateSchedule(userDetails.getUser(),updateScheduleRequest,scheduleId);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{scheduleId}")
-    public ResponseEntity<Void> deleteSchedule(@PathVariable Long scheduleId, @RequestBody DeleteScheduleRequestDto deleteScheduleRequestDto){
-        scheduleService.deleteSchedule(scheduleId, deleteScheduleRequestDto);
+    public ResponseEntity<Void> deleteSchedule(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long scheduleId){
+        scheduleService.deleteSchedule(userDetails.getUser(),scheduleId);
         return ResponseEntity.noContent().build();
     }
 }

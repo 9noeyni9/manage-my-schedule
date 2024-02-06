@@ -1,7 +1,6 @@
 package com.sparta.managemyschedule.service;
 
 import com.sparta.managemyschedule.dto.requestDto.CreateRequestDto;
-import com.sparta.managemyschedule.dto.requestDto.DeleteScheduleRequestDto;
 import com.sparta.managemyschedule.dto.requestDto.UpdateScheduleRequest;
 import com.sparta.managemyschedule.dto.responseDto.CreateResponseDto;
 import com.sparta.managemyschedule.dto.responseDto.ReadResponseDto;
@@ -17,7 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -25,8 +23,8 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
 
-    public CreateResponseDto createSchedule(CreateRequestDto createRequestDto, User user) {
-        Schedule saveSchedule = scheduleRepository.save(new Schedule(createRequestDto, user));
+    public CreateResponseDto createSchedule(User user, CreateRequestDto createRequestDto) {
+        Schedule saveSchedule = scheduleRepository.save(new Schedule(user, createRequestDto));
         return new CreateResponseDto(saveSchedule);
     }
 
@@ -40,29 +38,20 @@ public class ScheduleService {
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
-
         Page<Schedule> scheduleList = scheduleRepository.findAllByOrderByCreatedDateDesc(user,pageable);
 
         return scheduleList.map(ReadResponseDto::new);
     }
 
     @Transactional
-    public void updateSchedule(UpdateScheduleRequest updateScheduleRequest, Long scheduleId) {
+    public void updateSchedule(User user,UpdateScheduleRequest updateScheduleRequest, Long scheduleId) {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
-        if (Objects.equals(schedule.getPassword(), updateScheduleRequest.getInsertPwd())) {
-            schedule.update(updateScheduleRequest);
-        } else {
-            throw new NoSuchElementException("비밀번호가 일치하지 않습니다.");
-        }
+        schedule.update(user, updateScheduleRequest);
     }
 
     @Transactional
-    public void deleteSchedule(Long scheduleId, DeleteScheduleRequestDto deleteScheduleRequestDto) {
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
-
-        if(Objects.equals(schedule.getPassword(),deleteScheduleRequestDto.getInsertPwd()))
-            scheduleRepository.deleteById(scheduleId);
-        else
-            throw new NoSuchElementException("비밀번호가 일치하지 않습니다.");
+    public void deleteSchedule(User user, Long scheduleId) {
+        scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
+        scheduleRepository.deleteById(user,scheduleId);
     }
 }
