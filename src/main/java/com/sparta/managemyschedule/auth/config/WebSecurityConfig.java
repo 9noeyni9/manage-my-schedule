@@ -56,12 +56,10 @@ public class WebSecurityConfig {
 
         http.sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        http.authorizeHttpRequests((authrizeHttpRequests) -> authrizeHttpRequests.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+        http.authorizeHttpRequests((authrizeHttpRequests) -> authrizeHttpRequests
                 .requestMatchers("/").permitAll()
                 .requestMatchers("/api/user/**").permitAll()
                 .anyRequest().authenticated());
-
-        http.formLogin((formLogin) -> formLogin.permitAll());
 
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
