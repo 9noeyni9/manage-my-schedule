@@ -28,11 +28,15 @@ public class Schedule extends ScheduleDate {
     @Column(name="password",nullable = false)
     private String password;
 
-    public Schedule(CreateRequestDto createRequestDto) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    public Schedule(CreateRequestDto createRequestDto, User user) {
         this.title = createRequestDto.getTitle();
         this.content = createRequestDto.getContent();
         this.manager = createRequestDto.getManager();
-        this.password = createRequestDto.getPassword();
+        this.user = user;
     }
 
     public void settingSchedule(String title, String content, String manager) { // 테스트용 값 setting

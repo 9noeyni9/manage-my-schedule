@@ -6,6 +6,7 @@ import com.sparta.managemyschedule.dto.requestDto.UpdateScheduleRequest;
 import com.sparta.managemyschedule.dto.responseDto.CreateResponseDto;
 import com.sparta.managemyschedule.dto.responseDto.ReadResponseDto;
 import com.sparta.managemyschedule.entity.Schedule;
+import com.sparta.managemyschedule.entity.User;
 import com.sparta.managemyschedule.repository.ScheduleRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -24,11 +25,9 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
 
-    public CreateResponseDto createSchedule(CreateRequestDto createRequestDto) {
-        Schedule schedule = new Schedule(createRequestDto);
-        Schedule saveSchedule = scheduleRepository.save(schedule);
-        CreateResponseDto createResponseDto = new CreateResponseDto(saveSchedule);
-        return createResponseDto;
+    public CreateResponseDto createSchedule(CreateRequestDto createRequestDto, User user) {
+        Schedule saveSchedule = scheduleRepository.save(new Schedule(createRequestDto, user));
+        return new CreateResponseDto(saveSchedule);
     }
 
     public ReadResponseDto readSchedule(Long scheduleId) throws NoSuchElementException {
@@ -37,12 +36,12 @@ public class ScheduleService {
         return readResponseDto;
     }
 
-    public Page<ReadResponseDto> readAll(int page, int size, String sortBy, boolean isAsc) {
+    public Page<ReadResponseDto> readAll(User user,int page, int size, String sortBy, boolean isAsc) {
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<Schedule> scheduleList = scheduleRepository.findAllByOrderByCreatedDateDesc(pageable);
+        Page<Schedule> scheduleList = scheduleRepository.findAllByOrderByCreatedDateDesc(user,pageable);
 
         return scheduleList.map(ReadResponseDto::new);
     }

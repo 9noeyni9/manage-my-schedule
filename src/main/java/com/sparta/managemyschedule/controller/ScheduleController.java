@@ -1,5 +1,6 @@
 package com.sparta.managemyschedule.controller;
 
+import com.sparta.managemyschedule.auth.security.UserDetailsImpl;
 import com.sparta.managemyschedule.dto.requestDto.CreateRequestDto;
 import com.sparta.managemyschedule.dto.requestDto.DeleteScheduleRequestDto;
 import com.sparta.managemyschedule.dto.requestDto.UpdateScheduleRequest;
@@ -9,6 +10,7 @@ import com.sparta.managemyschedule.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,8 +20,8 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @PostMapping
-    public ResponseEntity<CreateResponseDto> createSchedule(@RequestBody CreateRequestDto createRequestDto){
-        CreateResponseDto createResponseDto = scheduleService.createSchedule(createRequestDto);
+    public ResponseEntity<CreateResponseDto> createSchedule(@RequestBody CreateRequestDto createRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        CreateResponseDto createResponseDto = scheduleService.createSchedule(createRequestDto, userDetails.getUser());
         return ResponseEntity.ok().body(createResponseDto);
     }
 
@@ -31,12 +33,13 @@ public class ScheduleController {
 
     @GetMapping
     public ResponseEntity<Page<ReadResponseDto>> readAll(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestParam("page") int page,
             @RequestParam("size") int size,
             @RequestParam("sortBy") String sortBy,
             @RequestParam("isAsc") boolean isAsc
     ){
-        Page<ReadResponseDto> scheduleList = scheduleService.readAll(page-1,size,sortBy,isAsc);
+        Page<ReadResponseDto> scheduleList = scheduleService.readAll(userDetails.getUser(),page-1,size,sortBy,isAsc);
         return ResponseEntity.ok().body(scheduleList);
     }
 
