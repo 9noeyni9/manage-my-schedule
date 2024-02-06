@@ -38,7 +38,7 @@ public class ScheduleService {
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<Schedule> scheduleList = scheduleRepository.findAllByOrderByCreatedDateDesc(user,pageable);
+        Page<Schedule> scheduleList = scheduleRepository.findAllByUserOrderByCreatedDateDesc(user,pageable);
 
         return scheduleList.map(ReadResponseDto::new);
     }
@@ -52,6 +52,6 @@ public class ScheduleService {
     @Transactional
     public void deleteSchedule(User user, Long scheduleId) {
         scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
-        scheduleRepository.deleteById(user,scheduleId);
+        scheduleRepository.deleteByUserAndId(user,scheduleId);
     }
 }

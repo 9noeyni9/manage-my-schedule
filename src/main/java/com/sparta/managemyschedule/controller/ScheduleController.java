@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/schedule")
+@RequestMapping("/api")
 public class ScheduleController {
     private final ScheduleService scheduleService;
 
@@ -24,7 +24,7 @@ public class ScheduleController {
         return ResponseEntity.ok().body(createResponseDto);
     }
 
-    @GetMapping("/{scheduleId}")
+    @GetMapping("/schedules/{scheduleId}")
     public ResponseEntity<ReadResponseDto> readSchedule(@PathVariable Long scheduleId){
         ReadResponseDto readResponseDto = scheduleService.readSchedule(scheduleId);
         return ResponseEntity.ok().body(readResponseDto);
@@ -42,13 +42,13 @@ public class ScheduleController {
         return ResponseEntity.ok().body(scheduleList);
     }
 
-    @PutMapping("/{scheduleId}")
+    @PutMapping("/schedules/{scheduleId}")
     public ResponseEntity<Void> updateSchedule(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody UpdateScheduleRequest updateScheduleRequest, @PathVariable Long scheduleId){
         scheduleService.updateSchedule(userDetails.getUser(),updateScheduleRequest,scheduleId);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{scheduleId}")
+    @DeleteMapping("/schedules/{scheduleId}")
     public ResponseEntity<Void> deleteSchedule(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long scheduleId){
         scheduleService.deleteSchedule(userDetails.getUser(),scheduleId);
         return ResponseEntity.noContent().build();

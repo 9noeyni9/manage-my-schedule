@@ -10,6 +10,6 @@ import java.util.Optional;
 
 public interface ScheduleRepository extends JpaRepository<Schedule,Long> {
     Optional<Schedule> findById(Long scheduleId);
-    Page<Schedule> findAllByOrderByCreatedDateDesc(User user, Pageable pageable);
-    void deleteById(User user, Long scheduleId);
+    Page<Schedule> findAllByUserOrderByCreatedDateDesc(User user, Pageable pageable);
+    void deleteByUserAndId(User user, Long scheduleId);
 }
