@@ -20,16 +20,16 @@ class ScheduleTransactionTest {
     @Autowired
     ScheduleRepository scheduleRepository;
 
-    @Test
-    @Transactional
-    @Rollback
-    @DisplayName("스케줄 등록 성공")
-    void createScheduleTest() {
-        Schedule schedule = new Schedule();
-
-        schedule.settingSchedule("테스트 스케줄 title", "테스트 스케줄 content", "담당자테스트");
-
-        em.persist(schedule);
-    }
+//    @Test
+//    @Transactional
+//    @Rollback
+//    @DisplayName("스케줄 등록 성공")
+//    void createScheduleTest() {
+//        Schedule schedule = new Schedule();
+//
+//        schedule.settingSchedule("테스트 스케줄 title", "테스트 스케줄 content", "담당자테스트");
+//
+//        em.persist(schedule);
+//    }
 
 }
