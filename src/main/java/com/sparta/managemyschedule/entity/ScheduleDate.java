@@ -20,14 +20,4 @@ public abstract class ScheduleDate {
     @LastModifiedDate
     @Column(name = "modifiedDate")
     private LocalDateTime modifiedDate;
-
-    @PrePersist
-    protected void onCreate() {
-        createdDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        modifiedDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
-    }
 }

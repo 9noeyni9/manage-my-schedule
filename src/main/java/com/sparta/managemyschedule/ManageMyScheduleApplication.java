@@ -10,12 +10,6 @@ import java.util.TimeZone;
 @EnableJpaAuditing
 @SpringBootApplication(scanBasePackages = "com.sparta.managemyschedule")
 public class ManageMyScheduleApplication {
-
-    @PostConstruct
-    void started() {
-        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
-    }
-
     public static void main(String[] args) {
         SpringApplication.run(ManageMyScheduleApplication.class, args);
     }
