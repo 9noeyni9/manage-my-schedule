@@ -56,6 +56,6 @@ public class ScheduleController {
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Void> deleteSchedule(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long scheduleId){
         scheduleService.deleteSchedule(userDetails.getUser(),scheduleId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }

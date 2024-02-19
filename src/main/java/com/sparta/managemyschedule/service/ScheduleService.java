@@ -23,6 +23,7 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
 
+    @Transactional
     public CreateResponseDto createSchedule(User user, CreateRequestDto createRequestDto) {
         Schedule saveSchedule = scheduleRepository.save(new Schedule(user, createRequestDto));
         return new CreateResponseDto(saveSchedule);
@@ -30,8 +31,7 @@ public class ScheduleService {
 
     public ReadResponseDto readSchedule(Long scheduleId) throws NoSuchElementException {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
-        ReadResponseDto readResponseDto = new ReadResponseDto(schedule);
-        return readResponseDto;
+        return new ReadResponseDto(schedule);
     }
 
     public Page<ReadResponseDto> readAll(User user,int page, int size, String sortBy, boolean isAsc) {
