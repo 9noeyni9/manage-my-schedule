@@ -22,13 +22,13 @@ public class UserService {
 
         Optional<User> checkUsername = userRepository.findByUsername(username);
         if(checkUsername.isPresent()){
-            throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
+            throw new IllegalArgumentException("중복된 아이디가 존재합니다.");
         }
 
         String email = requestDto.getEmail();
         Optional<User> checkEmail = userRepository.findByEmail(email);
         if(checkEmail.isPresent()){
-            throw new IllegalArgumentException("중복된 email입니다.");
+            throw new IllegalArgumentException("중복된 email 입니다.");
         }
 
         User user = new User(username, password, email);
