@@ -154,4 +154,38 @@ class ScheduleServiceTest {
         assertDoesNotThrow(() -> scheduleService.updateSchedule(user,updateScheduleRequest,schedule.getId()));
         assertEquals(updateScheduleRequest.getContent(),schedule.getContent());
     }
+
+    @Test
+    @DisplayName("스케줄 삭제 성공 테스트")
+    @Transactional
+    void 스케줄_삭제_성공(){
+        // given
+        CreateRequestDto createRequestDto = new CreateRequestDto("스케줄 내용 삭제 성공 테스트 ","삭제될 테스트~");
+        schedule = scheduleRepository.save(new Schedule(user,createRequestDto));
+
+        // when
+        scheduleRepository.findById(schedule.getId());
+        scheduleService.deleteSchedule(user, schedule.getId());
+
+        // then
+        Optional<Schedule> checkSchedule = scheduleRepository.findById(schedule.getId());
+        assert(checkSchedule).isEmpty();
+    }
+
+    @Test
+    @DisplayName("이미 삭제된 스케줄 삭제 실패 테스트")
+    @Transactional
+    void 삭제_실패(){
+        // given
+        CreateRequestDto createRequestDto = new CreateRequestDto("삭제 될 테스트","삭제될 테스트~");
+        schedule = scheduleRepository.save(new Schedule(user,createRequestDto));
+        long alreadDeleteScheduleId = schedule.getId();
+
+        // when
+        scheduleRepository.findById(schedule.getId());
+        scheduleRepository.deleteByUserAndId(user,schedule.getId());
+
+        // then
+        assertThrows(NoSuchElementException.class,() -> scheduleService.deleteSchedule(user,alreadDeleteScheduleId));
+    }
 }
