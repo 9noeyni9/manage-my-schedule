@@ -1,12 +1,14 @@
 package com.sparta.managemyschedule.service;
 
 import com.sparta.managemyschedule.dto.requestDto.CreateRequestDto;
+import com.sparta.managemyschedule.dto.requestDto.UpdateScheduleRequest;
 import com.sparta.managemyschedule.dto.responseDto.CreateResponseDto;
 import com.sparta.managemyschedule.dto.responseDto.ReadResponseDto;
 import com.sparta.managemyschedule.entity.Schedule;
 import com.sparta.managemyschedule.entity.User;
 import com.sparta.managemyschedule.repository.ScheduleRepository;
 import com.sparta.managemyschedule.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,8 +21,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
+import static org.assertj.core.api.FactoryBasedNavigableListAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
@@ -62,6 +69,7 @@ class ScheduleServiceTest {
 
     @Test
     @DisplayName("스케줄 전체 조회 성공")
+    @Transactional
     void 스케줄_전체조회_성공(){
         //given
         CreateRequestDto createRequestDto1 = new CreateRequestDto("스케줄 전체 조회 테스트 1","첫번째!");
@@ -107,5 +115,43 @@ class ScheduleServiceTest {
 
         // then
         assertThrows(NoSuchElementException.class, () -> scheduleService.readSchedule(schedule.getId() +1L));
+    }
+
+    @Test
+    @DisplayName("스케줄 제목 수정 성공")
+    @Transactional // 테스트 코드에서 롤백해주는 용도
+    void 스케줄_수정_성공(){
+        // given
+        CreateRequestDto createRequestDto = new CreateRequestDto("스케줄 제목 수정 성공 테스트 ","제목 수정하기");
+        schedule = scheduleRepository.save(new Schedule(user,createRequestDto));
+
+        UpdateScheduleRequest updateScheduleRequest = new UpdateScheduleRequest("제목이 수정이 되려나?",createRequestDto.getContent());
+
+        // when
+        scheduleRepository.findById(schedule.getId());
+        scheduleService.updateSchedule(user,updateScheduleRequest,schedule.getId());
+
+        // then
+        assertDoesNotThrow(() -> scheduleService.updateSchedule(user,updateScheduleRequest,schedule.getId()));
+        assertEquals(updateScheduleRequest.getTitle(),schedule.getTitle());
+    }
+
+    @Test
+    @DisplayName("스케줄 내용 수정 성공")
+    @Transactional
+    void 스케줄_내용수정_성공(){
+        // given
+        CreateRequestDto createRequestDto = new CreateRequestDto("스케줄 내용 수정 성공 테스트 ","내용 수정하기");
+        schedule = scheduleRepository.save(new Schedule(user,createRequestDto));
+
+        UpdateScheduleRequest updateScheduleRequest = new UpdateScheduleRequest(createRequestDto.getTitle(),"내용 수정 되겠지?????");
+
+        // when
+        scheduleRepository.findById(schedule.getId());
+        scheduleService.updateSchedule(user,updateScheduleRequest,schedule.getId());
+
+        // then
+        assertDoesNotThrow(() -> scheduleService.updateSchedule(user,updateScheduleRequest,schedule.getId()));
+        assertEquals(updateScheduleRequest.getContent(),schedule.getContent());
     }
 }
