@@ -23,11 +23,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.assertj.core.api.FactoryBasedNavigableListAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
@@ -41,15 +37,20 @@ class ScheduleServiceTest {
     @Autowired
     UserRepository userRepository;
     @Mock
-    User user;
+    User user, userForComparison;
 
     @Mock
-    Schedule schedule;
+    Schedule schedule, scheduleForComparison;
 
     @BeforeEach
     void setup(){
         user = new User("testuser1","testuser1","testuser1@test.com");
         userRepository.save(user);
+
+        userForComparison = new User("testuser2","testuser2","testuser2@test.com");
+        userRepository.save(userForComparison);
+
+        scheduleForComparison = scheduleRepository.save(new Schedule(userForComparison,new CreateRequestDto("userForComparison의 일정","user에겐 상세 조회를 제외하고 권한 없음")));
     }
 
     @Test
@@ -104,7 +105,21 @@ class ScheduleServiceTest {
     }
 
     @Test
-    @DisplayName("스케줄 상세 조회 실패")
+    @DisplayName("작성자 구분없이 스케줄 상세 조회 성공")
+    void 스케줄_상세조회_성공2(){
+        // given
+        CreateRequestDto createRequestDto = new CreateRequestDto("스케줄 상세 조회 성공 테스트 ","성공~~");
+        schedule = scheduleRepository.save(new Schedule(user,createRequestDto));
+
+        // when
+        scheduleService.readSchedule(scheduleForComparison.getId());
+
+        // then
+        assertDoesNotThrow(() -> scheduleService.readSchedule(schedule.getId()));
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 스케줄 상세 조회 실패")
     void 스케줄_상세조회_실패(){
         // given
         CreateRequestDto createRequestDto = new CreateRequestDto("스케줄 상세 조회 실패 테스트 ","실패!!!");
