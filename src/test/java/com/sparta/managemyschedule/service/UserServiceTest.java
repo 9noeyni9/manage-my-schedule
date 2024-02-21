@@ -29,6 +29,7 @@ class UserServiceTest {
     @Mock
     PasswordEncoder passwordEncoder;
 
+
     @Test
     @DisplayName("회원 가입 성공")
     void 회원가입_성공(){
@@ -42,7 +43,6 @@ class UserServiceTest {
 
         // then
         assertDoesNotThrow(() -> userService.signup(signupRequestDto));
-        userRepository.save(new User(signupRequestDto.getUsername(),signupRequestDto.getPassword(),signupRequestDto.getEmail()));
     }
 
     @Test
