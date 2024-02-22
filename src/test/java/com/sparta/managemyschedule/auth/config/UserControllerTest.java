@@ -17,7 +17,6 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -26,7 +25,6 @@ import org.springframework.web.context.WebApplicationContext;
 import java.security.Principal;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -85,6 +83,20 @@ class UserControllerTest {
                 )
                 .andExpect(status().isOk())
                 .andReturn();
+    }
+
+    @Test
+    @DisplayName("회원조회성공")
+    void 회원조회_성공() throws Exception{
+        // given
+        mockUserSetup();
+
+        // when
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/user-info")
+                        .principal(mockPrincipal)
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 
 }
