@@ -2,10 +2,11 @@ package com.sparta.managemyschedule.auth.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.managemyschedule.auth.security.UserDetailsImpl;
-import com.sparta.managemyschedule.controller.UserController;
-import com.sparta.managemyschedule.dto.requestDto.SignupRequestDto;
+import com.sparta.managemyschedule.controller.ScheduleController;
+import com.sparta.managemyschedule.dto.requestDto.CreateRequestDto;
+import com.sparta.managemyschedule.dto.responseDto.CreateResponseDto;
 import com.sparta.managemyschedule.entity.User;
-import com.sparta.managemyschedule.service.UserService;
+import com.sparta.managemyschedule.service.ScheduleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,11 +27,10 @@ import java.security.Principal;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(
-        controllers = {UserController.class},
+        controllers = {ScheduleController.class},
         excludeFilters = {
                 @ComponentScan.Filter(
                         type = FilterType.ASSIGNABLE_TYPE,
@@ -39,8 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         }
 )
 @MockBean(JpaMetamodelMappingContext.class)
-class UserControllerTest {
-
+public class ScheduleControllerTest {
     @Autowired
     private WebApplicationContext context;
 
@@ -52,7 +51,7 @@ class UserControllerTest {
     private Principal mockPrincipal;
 
     @MockBean
-    UserService userService;
+    ScheduleService scheduleService;
 
     @BeforeEach
     public void setup() {
@@ -71,31 +70,16 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("회원가입성공")
-    void 회원가입_성공() throws Exception{
-        // given
-        SignupRequestDto signupRequestDto = new SignupRequestDto("test1111","test1111","test1111@test.com");
-        // when
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/user/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(signupRequestDto))
-                )
-                .andExpect(status().isOk())
-                .andReturn();
-    }
-
-    @Test
-    @DisplayName("회원조회성공")
-    void 회원조회_성공() throws Exception{
-        // given
+    @DisplayName("일정 생성 성공")
+    void 일정생성_성공() throws Exception{
         mockUserSetup();
-
-        // when
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/user-info")
-                        .principal(mockPrincipal)
+        CreateRequestDto createRequestDto = new CreateRequestDto("컨트롤러 테스트","생성 테스트 입니다~");
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/schedules")
+                    .principal(mockPrincipal)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(createRequestDto))
                 )
                 .andExpect(status().isOk())
                 .andDo(print());
     }
-
 }
