@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.managemyschedule.auth.security.UserDetailsImpl;
 import com.sparta.managemyschedule.controller.ScheduleController;
 import com.sparta.managemyschedule.dto.requestDto.CreateRequestDto;
-import com.sparta.managemyschedule.dto.responseDto.CreateResponseDto;
 import com.sparta.managemyschedule.entity.User;
+import com.sparta.managemyschedule.repository.ScheduleRepository;
 import com.sparta.managemyschedule.service.ScheduleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,6 +21,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.security.Principal;
@@ -53,6 +54,9 @@ public class ScheduleControllerTest {
     @MockBean
     ScheduleService scheduleService;
 
+    @MockBean
+    ScheduleRepository scheduleRepository;
+
     @BeforeEach
     public void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context)
@@ -60,7 +64,7 @@ public class ScheduleControllerTest {
                 .build();
     }
 
-    private void mockUserSetup(){
+    private void mockUserSetup() throws Exception {
         String username = "test0000";
         String password = "test0000";
         String email = "test0000@test.com";
@@ -70,14 +74,30 @@ public class ScheduleControllerTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("일정 생성 성공")
     void 일정생성_성공() throws Exception{
         mockUserSetup();
         CreateRequestDto createRequestDto = new CreateRequestDto("컨트롤러 테스트","생성 테스트 입니다~");
         mockMvc.perform(MockMvcRequestBuilders.post("/api/schedules")
-                    .principal(mockPrincipal)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(createRequestDto))
+                        .principal(mockPrincipal)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createRequestDto))
+                    )
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("일정 전체 조회 성공")
+    void 일정전체조회_성공() throws Exception {
+        mockUserSetup();
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/schedules")
+                        .principal(mockPrincipal)
+                        .param("page",String.valueOf(1))
+                        .param("size",String.valueOf(20))
+                        .param("sortBy","id")
+                        .param("isAsc",String.valueOf(true))
                 )
                 .andExpect(status().isOk())
                 .andDo(print());
