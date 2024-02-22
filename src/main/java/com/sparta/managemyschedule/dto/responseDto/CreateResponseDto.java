@@ -1,11 +1,13 @@
 package com.sparta.managemyschedule.dto.responseDto;
 
 import com.sparta.managemyschedule.entity.Schedule;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@AllArgsConstructor
 public class CreateResponseDto {
     private Long scheduleId;
     private String title;
