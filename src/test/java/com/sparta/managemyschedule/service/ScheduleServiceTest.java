@@ -55,7 +55,7 @@ class ScheduleServiceTest {
 
     @Test
     @DisplayName("스케줄 생성 성공")
-    void 스케줄생성_성공(){
+    void 생성_성공(){
         // given
         CreateRequestDto createRequestDto = new CreateRequestDto("스케줄 생성 테스트 하는 날","성공해야 다음 테스트 가능!");
 
@@ -71,7 +71,7 @@ class ScheduleServiceTest {
     @Test
     @DisplayName("스케줄 전체 조회 성공")
     @Transactional
-    void 스케줄_전체조회_성공(){
+    void 전체조회_성공(){
         //given
         CreateRequestDto createRequestDto1 = new CreateRequestDto("스케줄 전체 조회 테스트 1","첫번째!");
         CreateRequestDto createRequestDto2 = new CreateRequestDto("스케줄 전체 조회 테스트 2","두번째!");
@@ -92,7 +92,7 @@ class ScheduleServiceTest {
 
     @Test
     @DisplayName("스케줄 상세 조회 성공")
-    void 스케줄_상세조회_성공(){
+    void 상세조회_성공1(){
         // given
         CreateRequestDto createRequestDto = new CreateRequestDto("스케줄 상세 조회 성공 테스트 ","성공~~");
         schedule = scheduleRepository.save(new Schedule(user,createRequestDto));
@@ -106,7 +106,7 @@ class ScheduleServiceTest {
 
     @Test
     @DisplayName("작성자 구분없이 스케줄 상세 조회 성공")
-    void 스케줄_상세조회_성공2(){
+    void 상세조회_성공2(){
         // given
         CreateRequestDto createRequestDto = new CreateRequestDto("스케줄 상세 조회 성공 테스트 ","성공~~");
         schedule = scheduleRepository.save(new Schedule(user,createRequestDto));
@@ -120,7 +120,7 @@ class ScheduleServiceTest {
 
     @Test
     @DisplayName("존재하지 않는 스케줄 상세 조회 실패")
-    void 스케줄_상세조회_실패(){
+    void 상세조회_실패(){
         // given
         CreateRequestDto createRequestDto = new CreateRequestDto("스케줄 상세 조회 실패 테스트 ","실패!!!");
         schedule = scheduleRepository.save(new Schedule(user,createRequestDto));
@@ -135,7 +135,7 @@ class ScheduleServiceTest {
     @Test
     @DisplayName("스케줄 제목 수정 성공")
     @Transactional // 테스트 코드에서 롤백해주는 용도
-    void 스케줄_수정_성공(){
+    void 제목수정_성공(){
         // given
         CreateRequestDto createRequestDto = new CreateRequestDto("스케줄 제목 수정 성공 테스트 ","제목 수정하기");
         schedule = scheduleRepository.save(new Schedule(user,createRequestDto));
@@ -154,7 +154,7 @@ class ScheduleServiceTest {
     @Test
     @DisplayName("스케줄 내용 수정 성공")
     @Transactional
-    void 스케줄_내용수정_성공(){
+    void 내용수정_성공(){
         // given
         CreateRequestDto createRequestDto = new CreateRequestDto("스케줄 내용 수정 성공 테스트 ","내용 수정하기");
         schedule = scheduleRepository.save(new Schedule(user,createRequestDto));
@@ -173,7 +173,7 @@ class ScheduleServiceTest {
     @Test
     @DisplayName("스케줄 삭제 성공 테스트")
     @Transactional
-    void 스케줄_삭제_성공(){
+    void 삭제_성공(){
         // given
         CreateRequestDto createRequestDto = new CreateRequestDto("스케줄 내용 삭제 성공 테스트 ","삭제될 테스트~");
         schedule = scheduleRepository.save(new Schedule(user,createRequestDto));
