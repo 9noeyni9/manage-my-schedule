@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.managemyschedule.auth.security.UserDetailsImpl;
 import com.sparta.managemyschedule.common.Data;
 import com.sparta.managemyschedule.controller.ScheduleController;
-import com.sparta.managemyschedule.dto.responseDto.CreateResponseDto;
+import com.sparta.managemyschedule.dto.responseDto.ReadResponseDto;
 import com.sparta.managemyschedule.entity.Schedule;
 import com.sparta.managemyschedule.entity.User;
 import com.sparta.managemyschedule.service.ScheduleService;
@@ -105,8 +105,8 @@ public class ScheduleControllerTest {
     @DisplayName("로그인 한 사용자 일정 상세 조회")
     void 상세조회_성공1() throws Exception{
         mockUserSetup();
-        CreateResponseDto createResponseDto = Data.getDto();
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/schedules/{scheduleId}",createResponseDto.getScheduleId())
+        ReadResponseDto readResponseDto = Data.getDto();
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/schedules/{scheduleId}",readResponseDto.getScheduleId())
                         .principal(mockPrincipal)
                 )
                 .andExpect(status().isOk())
@@ -116,8 +116,8 @@ public class ScheduleControllerTest {
     @Test
     @DisplayName("로그인 안 한 사용자 일정 상세 조회 성공")
     void 상세조회_성공2() throws Exception{
-        CreateResponseDto createResponseDto = Data.getDto();
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/schedules/{scheduleId}",createResponseDto.getScheduleId()))
+        ReadResponseDto readResponseDto = Data.getDto();
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/schedules/{scheduleId}",readResponseDto.getScheduleId()))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -125,12 +125,70 @@ public class ScheduleControllerTest {
     @Test
     @DisplayName("없는 글 상세 조회 실패")
     void 상세조회_실패1() throws Exception{
-        CreateResponseDto createResponseDto = Data.getDto();
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/schedules/{scheduleId}",(double)createResponseDto.getScheduleId()/37))
+        ReadResponseDto readResponseDto = Data.getDto();
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/schedules/{scheduleId}",(double)readResponseDto.getScheduleId()/37))
                 .andExpect(status().isBadRequest())
                 .andExpect(result -> {
                     Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(),result.getResponse().getStatus());
                 })
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("일정 수정 성공")
+    void 일정_수정_성공() throws Exception{
+        mockUserSetup();
+        ReadResponseDto readResponseDto = Data.getDto();
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/schedules/{scheduleId}",readResponseDto.getScheduleId())
+                        .principal(mockPrincipal)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(Data.getUpdateRequestDto()))
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("없는 일정 수정 시도-실패")
+    void 일정_수정_실패1() throws Exception{
+        mockUserSetup();
+        ReadResponseDto readResponseDto = Data.getDto();
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/schedules/{scheduleId}",(double)readResponseDto.getScheduleId()/37)
+                        .principal(mockPrincipal)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(Data.getUpdateRequestDto()))
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> {
+                    Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(),result.getResponse().getStatus());
+                })
+                .andDo(print());
+
+    }
+        @Test
+        @DisplayName("일정 삭제 성공")
+        void 일정_삭제_성공() throws Exception{
+            mockUserSetup();
+            ReadResponseDto readResponseDto = Data.getDto();
+            mockMvc.perform(MockMvcRequestBuilders.delete("/api/schedules/{scheduleId}",readResponseDto.getScheduleId())
+                            .principal(mockPrincipal)
+                    )
+                    .andExpect(status().isOk())
+                    .andDo(print());
+        }
+
+        @Test
+        @DisplayName("없는 일정 수정 시도-실패")
+        void 일정_삭제_실패1() throws Exception {
+            mockUserSetup();
+            ReadResponseDto readResponseDto = Data.getDto();
+            mockMvc.perform(MockMvcRequestBuilders.delete("/api/schedules/{scheduleId}", (double) readResponseDto.getScheduleId() / 37)
+                            .principal(mockPrincipal)
+                    )
+                    .andExpect(status().isBadRequest())
+                    .andExpect(result -> {
+                        Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
+                    })
+                    .andDo(print());
+        }
 }

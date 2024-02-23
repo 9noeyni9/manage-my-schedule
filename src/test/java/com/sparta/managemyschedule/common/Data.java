@@ -1,7 +1,9 @@
 package com.sparta.managemyschedule.common;
 
 import com.sparta.managemyschedule.dto.requestDto.CreateRequestDto;
+import com.sparta.managemyschedule.dto.requestDto.UpdateScheduleRequest;
 import com.sparta.managemyschedule.dto.responseDto.CreateResponseDto;
+import com.sparta.managemyschedule.dto.responseDto.ReadResponseDto;
 import com.sparta.managemyschedule.entity.Schedule;
 import com.sparta.managemyschedule.entity.User;
 
@@ -18,13 +20,31 @@ public class Data {
         return schedule;
     }
 
-    public static CreateResponseDto getDto(){
+    public static ReadResponseDto getDto(){
         Long scheduleId = 1L;
         String title = "test";
         String content ="test";
         LocalDateTime createdDate = LocalDateTime.now();
-        CreateResponseDto createResponseDto = new CreateResponseDto(scheduleId,title,content,createdDate);
+        LocalDateTime modifiedDate = LocalDateTime.now();
+        ReadResponseDto readResponseDto = new ReadResponseDto(scheduleId,title,content,createdDate,modifiedDate);
 
-        return createResponseDto;
+        return readResponseDto;
+    }
+
+    public static UpdateScheduleRequest getUpdateRequestDto(){
+        String title = "test변경";
+        String content = "test변경";
+        UpdateScheduleRequest updateScheduleRequest = new UpdateScheduleRequest(title,content);
+
+        return updateScheduleRequest;
+    }
+
+    public static Schedule getDefferenceSchedule(){
+        String username = "testuser2222";
+        String password = "testuser2222";
+        String email = "testuser2222@test.com";
+        User defferenceUser = new User(username,password,email);
+        Schedule failCaseSchedule = new Schedule(defferenceUser,new CreateRequestDto("다른 사람이 생성한 일정","실패 케이스!"));
+        return failCaseSchedule;
     }
 }
