@@ -1,4 +1,4 @@
-package com.sparta.managemyschedule.config;
+package com.sparta.managemyschedule.global.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
