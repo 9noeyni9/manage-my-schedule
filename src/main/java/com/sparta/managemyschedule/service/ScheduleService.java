@@ -6,6 +6,8 @@ import com.sparta.managemyschedule.dto.responseDto.CreateResponseDto;
 import com.sparta.managemyschedule.dto.responseDto.ReadResponseDto;
 import com.sparta.managemyschedule.entity.Schedule;
 import com.sparta.managemyschedule.entity.User;
+import com.sparta.managemyschedule.global.enumeration.ErrorCode;
+import com.sparta.managemyschedule.global.exception.InvalidInputException;
 import com.sparta.managemyschedule.repository.ScheduleRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +32,8 @@ public class ScheduleService {
     }
 
     public ReadResponseDto readSchedule(Long scheduleId) throws NoSuchElementException {
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new InvalidInputException(
+            ErrorCode.NOT_VALID_SCHEDULE));
         return new ReadResponseDto(schedule);
     }
 
@@ -45,13 +48,15 @@ public class ScheduleService {
 
     @Transactional
     public void updateSchedule(User user,UpdateScheduleRequest updateScheduleRequest, Long scheduleId) {
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new InvalidInputException(
+            ErrorCode.NOT_VALID_SCHEDULE));
         schedule.update(user, updateScheduleRequest);
     }
 
     @Transactional
     public void deleteSchedule(User user, Long scheduleId) {
-        scheduleRepository.findById(scheduleId).orElseThrow(NoSuchElementException::new);
+        scheduleRepository.findById(scheduleId).orElseThrow(() -> new InvalidInputException(
+            ErrorCode.NOT_VALID_SCHEDULE));
         scheduleRepository.deleteByUserAndId(user,scheduleId);
     }
 }
