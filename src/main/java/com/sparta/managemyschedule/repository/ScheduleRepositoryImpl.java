@@ -16,7 +16,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom{
 
     private final JPAQueryFactory jpaQueryFactory;
     @Override
-    public Page<ReadResponseDto> findAll(Pageable pageable) {
+    public Page<ReadResponseDto> findAll(Long userId,Pageable pageable) {
         List<ReadResponseDto> list = jpaQueryFactory
             .select(Projections.constructor(ReadResponseDto.class,
                 schedule.id,
@@ -24,6 +24,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom{
                 schedule.content,
                 schedule.createdDate))
             .from(schedule)
+            .where(schedule.user.id.eq(userId))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
@@ -31,6 +32,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom{
         Long count = jpaQueryFactory
             .select(schedule.count())
             .from(schedule)
+            .where(schedule.user.id.eq(userId))
             .fetchOne();
         return new PageImpl<>(list, pageable, count);
     }
